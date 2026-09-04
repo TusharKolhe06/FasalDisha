@@ -114,5 +114,32 @@
   "offlineAllSynced": "All offline purchase requests have been synchronized.",
   "offlineProductId": "Product ID",
   "offlineQuantity": "Quantity",
-  "offlineStatus": "Status"
+  "offlineStatus": "Status",
+  
+  "governmentMandiPrices": "Government Mandi Prices",
+  "todaysMandiPrices": "Today's Mandi Prices",
+  "governmentMandiData": "Government Mandi Data",
+  "compareMandiPrices": "Compare government mandi prices before deciding where to sell.",
+ 
+  "minimumPrice": "Minimum Price",
+  "maximumPrice": "Maximum Price",
+  "modalPrice": "Modal Price",
+  "mandiBenchmark": "Mandi Benchmark",
+  "checkMandiPrices": "Check Mandi Prices",
+ 
+  "aboveMandiBenchmark": "Above Mandi Benchmark",
+  "nearMandiBenchmark": "Near Mandi Benchmark",
+  "belowMandiBenchmark": "Below Mandi Benchmark",
+  "buyerOffer": "Buyer Offer",
+  "offerBelowMandiRate": "This offer is below today's mandi rate.",
+  "betterOffer": "Better Offer",
+  "fairOffer": "Fair Offer",
+  "priceDifference": "Price Difference",
+  "priceDifferencePercent": "Price Difference %",
+  "dataSource": "Data Source",
+  "lastUpdated": "Last Updated",
+  "noMandiData": "No mandi price data found for this crop and district.",
+  "internetRequired": "Internet connection is required to fetch mandi prices.",
+  "showingSavedMandiData": "Showing previously saved mandi data."
+
 }

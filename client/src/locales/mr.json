@@ -115,6 +115,34 @@
   "offlineAllSynced": "सर्व ऑफलाइन खरेदीच्या विनंत्या यशस्वीरित्या सिंक झाल्या आहेत.",
   "offlineProductId": "उत्पादन ID",
   "offlineQuantity": "प्रमाण",
-  "offlineStatus": "स्थिती"
+  "offlineStatus": "स्थिती",
+  
+  "governmentMandiPrices": "सरकारी मंडी बाजारभाव",
+  "todaysMandiPrices": "आजचे मंडी बाजारभाव",
+  "governmentMandiData": "सरकारी मंडी माहिती",
+  "compareMandiPrices": "विक्रीचा निर्णय घेण्यापूर्वी सरकारी मंडी दरांची तुलना करा.",
+
+
+  "minimumPrice": "किमान दर",
+  "maximumPrice": "कमाल दर",
+  "modalPrice": "सर्वाधिक व्यवहाराचा दर",
+  "mandiBenchmark": "मंडी संदर्भ दर",
+  "checkMandiPrices": "मंडीचे दर तपासा",
+ 
+  "aboveMandiBenchmark": "मंडी संदर्भ दरापेक्षा जास्त",
+  "nearMandiBenchmark": "मंडी संदर्भ दराच्या आसपास",
+  "belowMandiBenchmark": "मंडी संदर्भ दरापेक्षा कमी",
+  "buyerOffer": "खरेदीदाराची ऑफर",
+  "offerBelowMandiRate": "ही ऑफर आजच्या मंडी दरापेक्षा कमी आहे.",
+  "betterOffer": "चांगली ऑफर",
+  "fairOffer": "योग्य ऑफर",
+  "priceDifference": "दरातील फरक",
+  "priceDifferencePercent": "दरातील टक्केवारी फरक",
+  "dataSource": "माहितीचा स्रोत",
+  "lastUpdated": "शेवटचे अपडेट",
+  "noMandiData": "या पिकासाठी आणि जिल्ह्यासाठी मंडीची माहिती उपलब्ध नाही.",
+  "internetRequired": "मंडीचे दर मिळवण्यासाठी इंटरनेट कनेक्शन आवश्यक आहे.",
+  "showingSavedMandiData": "पूर्वी जतन केलेली मंडी माहिती दाखवत आहे."
+
 
 }

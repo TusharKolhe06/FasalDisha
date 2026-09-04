@@ -1,20 +1,35 @@
+
 import { useEffect, useMemo, useState } from "react";
 import api from "../services/api";
 import PriceChart from "../components/PriceChart";
 import { useAuth } from "../context/AuthContext";
 import { useTranslation } from "react-i18next";
+
 import {
   saveOfflineData,
   getOfflineData
 } from "../services/offlineStorage";
+
 import { useOffline } from "../context/useOffline";
+
 export default function Markets() {
   const [crops, setCrops] = useState([]);
   const [cropId, setCropId] = useState("");
   const [prices, setPrices] = useState([]);
+
   const [quantity, setQuantity] = useState(5);
   const [recommendation, setRecommendation] = useState(null);
   const [prediction, setPrediction] = useState(null);
+
+  // ==========================================
+  // MANDI PRICE STATES
+  // ==========================================
+
+  const [mandiCrop, setMandiCrop] = useState("Tomato");
+  const [mandiDistrict, setMandiDistrict] = useState("Nashik");
+  const [mandiData, setMandiData] = useState(null);
+  const [mandiLoading, setMandiLoading] = useState(false);
+  const [mandiError, setMandiError] = useState("");
 
   const { user } = useAuth();
   const { t } = useTranslation();
@@ -23,6 +38,7 @@ export default function Markets() {
   // ==========================================
   // LOAD CROPS
   // ==========================================
+
   useEffect(() => {
     const loadCrops = async () => {
       try {
@@ -30,8 +46,6 @@ export default function Markets() {
           const res = await api.get("/crops");
 
           setCrops(res.data);
-
-          // Save crops for offline use
           saveOfflineData("crops", res.data);
 
           if (res.data[0]) {
@@ -69,6 +83,7 @@ export default function Markets() {
   // ==========================================
   // LOAD MARKET PRICES
   // ==========================================
+
   useEffect(() => {
     if (!cropId) return;
 
@@ -81,7 +96,6 @@ export default function Markets() {
 
           setPrices(res.data);
 
-          // Cache prices separately for each crop
           saveOfflineData(
             `market_prices_${cropId}`,
             res.data
@@ -114,12 +128,23 @@ export default function Markets() {
   }, [cropId, isOnline]);
 
   // ==========================================
+  // SELECTED CROP
+  // ==========================================
+
+  const selectedCrop = useMemo(() => {
+    return crops.find(
+      (crop) => crop._id === cropId
+    );
+  }, [crops, cropId]);
+
+  // ==========================================
   // LATEST MARKET COMPARISON
   // ==========================================
+
   const latest = useMemo(() => {
     const map = new Map();
 
-    prices.forEach(p => {
+    prices.forEach((p) => {
       if (!map.has(p.marketName)) {
         map.set(p.marketName, p);
       }
@@ -128,36 +153,145 @@ export default function Markets() {
     return [...map.values()];
   }, [prices]);
 
+  
+// ==========================================
+// GOVERNMENT MANDI PRICES
+// ==========================================
+
+const fetchMandiPrices = async () => {
+  if (!isOnline) {
+    setMandiError(
+      t("internetRequiredMandi")
+    );
+    return;
+  }
+
+  try {
+    setMandiLoading(true);
+    setMandiError("");
+    setMandiData(null);
+
+    const response = await api.get(
+      "/market-prices/mandi",
+      {
+        params: {
+          crop: mandiCrop,
+          district: mandiDistrict
+        }
+      }
+    );
+
+    console.log(
+      "================================="
+    );
+    console.log(
+      "MANDI DATA RECEIVED:",
+      response.data
+    );
+    console.log(
+      "================================="
+    );
+
+    setMandiData(response.data);
+
+    saveOfflineData(
+      `mandi_${mandiCrop}_${mandiDistrict}`,
+      response.data
+    );
+
+  } catch (error) {
+    console.error(
+      "================================="
+    );
+    console.error(
+      "Could not fetch mandi prices:",
+      error
+    );
+    console.error(
+      "STATUS:",
+      error.response?.status
+    );
+    console.error(
+      "SERVER ERROR:",
+      error.response?.data
+    );
+    console.error(
+      "================================="
+    );
+
+    const cachedData = getOfflineData(
+      `mandi_${mandiCrop}_${mandiDistrict}`
+    );
+
+    if (cachedData) {
+      setMandiData(cachedData);
+
+      setMandiError(
+        t("showingSavedMandiData")
+      );
+    } else {
+      setMandiError(
+        error.response?.data?.message ||
+          t("couldNotFetchMandiPrices")
+      );
+    }
+
+  } finally {
+    setMandiLoading(false);
+  }
+};
+
+
+
   // ==========================================
-  // SMART RECOMMENDATION
+  // SMART SELLING RECOMMENDATION
   // ==========================================
+
   const recommend = async () => {
     if (!user) {
       return alert(t("pleaseLoginFirst"));
     }
 
+    if (!cropId) {
+      return alert(t("pleaseSelectCrop"));
+    }
+
+    if (!quantity || Number(quantity) <= 0) {
+      return alert(t("validQuantity"));
+    }
+
     if (!isOnline) {
-      return alert(
-        "Internet is required for Smart Selling Recommendation."
-      );
+      return alert(t("internetRecommendation"));
     }
 
     try {
+      const farmerDistrict =
+        user.location?.district || "";
+
+      const cropName =
+        selectedCrop?.name || "";
+
       const { data } = await api.post(
         "/prices/recommendation",
         {
           cropId,
-          quantity,
-          farmerLocation:
-            user.location?.district || ""
+          cropName,
+          quantity: Number(quantity),
+          farmerLocation: farmerDistrict,
+          district: farmerDistrict
         }
       );
 
       setRecommendation(data);
     } catch (error) {
+      console.error(
+        "Recommendation error:",
+        error
+      );
+
       alert(
         error.response?.data?.message ||
-        "Could not get recommendation."
+          t("couldNotGetRecommendation")
       );
     }
   };
@@ -165,15 +299,18 @@ export default function Markets() {
   // ==========================================
   // AI PRICE PREDICTION
   // ==========================================
+
   const predict = async () => {
     if (!user) {
       return alert(t("pleaseLoginFirst"));
     }
 
+    if (!cropId) {
+      return alert(t("pleaseSelectCrop"));
+    }
+
     if (!isOnline) {
-      return alert(
-        "Internet is required for AI price prediction."
-      );
+      return alert(t("internetPrediction"));
     }
 
     try {
@@ -187,11 +324,82 @@ export default function Markets() {
 
       setPrediction(data);
     } catch (error) {
+      console.error(
+        "Prediction error:",
+        error
+      );
+
       alert(
         error.response?.data?.message ||
-        "Could not predict price."
+          t("couldNotPredictPrice")
       );
     }
+  };
+
+  // ==========================================
+  // FORMAT MONEY
+  // ==========================================
+
+  const formatMoney = (value) => {
+    if (
+      value === undefined ||
+      value === null ||
+      Number.isNaN(Number(value))
+    ) {
+      return "—";
+    }
+
+    return Number(value).toLocaleString(
+      "en-IN"
+    );
+  };
+
+  // ==========================================
+  // MANDI STATUS
+  // ==========================================
+
+  const getMandiStatusText = (status) => {
+    switch (status) {
+      case "BETTER":
+        return `🟢 ${t("aboveMandiBenchmark")}`;
+
+      case "FAIR":
+        return `🟡 ${t("nearMandiBenchmark")}`;
+
+      case "BELOW_MANDI":
+        return `🔴 ${t("belowMandiBenchmark")}`;
+
+      default:
+        return `⚪ ${t("mandiBenchmarkUnavailable")}`;
+    }
+  };
+
+  // ==========================================
+  // AI TREND TEXT
+  // ==========================================
+
+  const getAITrendText = (difference) => {
+    const percent = Math.abs(
+      Number(difference)
+    ).toFixed(2);
+
+    if (difference >= 0) {
+      return {
+        title: `📈 ${t("expectedPriceIncrease")}`,
+        description: t(
+          "aiPredictedPriceHigher",
+          { percent }
+        )
+      };
+    }
+
+    return {
+      title: `📉 ${t("expectedPriceDecrease")}`,
+      description: t(
+        "aiPredictedPriceLower",
+        { percent }
+      )
+    };
   };
 
   return (
@@ -200,9 +408,11 @@ export default function Markets() {
       {/* ==========================================
           PAGE HEADER
       ========================================== */}
+
       <div className="page-head">
 
         <div>
+
           <p className="eyebrow">
             {t("priceDiscovery")}
           </p>
@@ -213,18 +423,19 @@ export default function Markets() {
 
           {!isOnline && (
             <p className="offline-data-note">
-              📡 Showing previously saved market data
+              📡 {t("showingSavedMarketData")}
             </p>
           )}
+
         </div>
 
         <select
           value={cropId}
-          onChange={e =>
+          onChange={(e) =>
             setCropId(e.target.value)
           }
         >
-          {crops.map(c => (
+          {crops.map((c) => (
             <option
               key={c._id}
               value={c._id}
@@ -236,9 +447,11 @@ export default function Markets() {
 
       </div>
 
+
       {/* ==========================================
-          MARKET DATA + CHART
+          EXISTING MARKET DATA + CHART
       ========================================== */}
+
       <div className="grid two">
 
         <section className="card">
@@ -251,8 +464,8 @@ export default function Markets() {
 
             <p>
               {isOnline
-                ? "No market data available."
-                : "No saved market data available offline."}
+                ? t("noMarketData")
+                : t("noSavedMarketData")}
             </p>
 
           ) : (
@@ -260,16 +473,28 @@ export default function Markets() {
             <table>
 
               <thead>
+
                 <tr>
-                  <th>{t("market")}</th>
-                  <th>{t("pricePerQuintal")}</th>
-                  <th>{t("district")}</th>
+
+                  <th>
+                    {t("market")}
+                  </th>
+
+                  <th>
+                    {t("pricePerQuintal")}
+                  </th>
+
+                  <th>
+                    {t("district")}
+                  </th>
+
                 </tr>
+
               </thead>
 
               <tbody>
 
-                {latest.map(p => (
+                {latest.map((p) => (
 
                   <tr key={p._id}>
 
@@ -278,7 +503,10 @@ export default function Markets() {
                     </td>
 
                     <td>
-                      ₹{p.pricePerQuintal}
+                      ₹
+                      {formatMoney(
+                        p.pricePerQuintal
+                      )}
                     </td>
 
                     <td>
@@ -297,6 +525,7 @@ export default function Markets() {
 
         </section>
 
+
         <section className="card">
 
           <h3>
@@ -304,25 +533,294 @@ export default function Markets() {
           </h3>
 
           {prices.length > 0 ? (
+
             <PriceChart data={prices} />
+
           ) : (
+
             <p>
-              No price history available.
+              {t("noPriceHistory")}
             </p>
+
           )}
 
         </section>
 
       </div>
 
+
       {/* ==========================================
-          SMART SELLING
+          GOVERNMENT MANDI PRICE DISCOVERY
       ========================================== */}
+
+      <section className="card mandi-card">
+
+        <div className="mandi-header">
+
+          <div>
+
+            <p className="eyebrow">
+              {t("governmentMandiData")}
+            </p>
+
+            <h2>
+              {t("todaysMandiPrices")}
+            </h2>
+
+            <p>
+              {t("compareMandiPrices")}
+            </p>
+
+          </div>
+
+        </div>
+
+
+        {/* MANDI CONTROLS */}
+
+        <div className="mandi-controls">
+
+          <label>
+
+            {t("crop")}
+
+            <select
+              value={mandiCrop}
+              onChange={(e) =>
+                setMandiCrop(e.target.value)
+              }
+            >
+
+              <option value="Tomato">
+                Tomato
+              </option>
+
+              <option value="Onion">
+                Onion
+              </option>
+
+              <option value="Grapes">
+                Grapes
+              </option>
+
+            </select>
+
+          </label>
+
+
+          <label>
+
+            {t("district")}
+
+            <select
+              value={mandiDistrict}
+              onChange={(e) =>
+                setMandiDistrict(e.target.value)
+              }
+            >
+
+              <option value="Nashik">
+                Nashik
+              </option>
+
+              <option value="Pune">
+                Pune
+              </option>
+
+              <option value="Mumbai">
+                Mumbai
+              </option>
+
+              <option value="Nagpur">
+                Nagpur
+              </option>
+
+              <option value="Ahmednagar">
+                Ahmednagar
+              </option>
+
+            </select>
+
+          </label>
+
+
+          <button
+            className="btn"
+            onClick={fetchMandiPrices}
+            disabled={
+              mandiLoading || !isOnline
+            }
+          >
+
+            {mandiLoading
+              ? t("loading")
+              : t("checkMandiPrices")}
+
+          </button>
+
+        </div>
+
+
+        {/* MANDI ERROR */}
+
+        {mandiError && (
+
+          <div className="mandi-message">
+            ⚠️ {mandiError}
+          </div>
+
+        )}
+
+
+        {/* MANDI BENCHMARK */}
+
+        {mandiData?.benchmarkPricePerQuintal > 0 && (
+
+          <div className="mandi-benchmark">
+
+            <div>
+
+              <span>
+                {t("fasalDishaMandiBenchmark")}
+              </span>
+
+              <small>
+                {mandiData.crop} •{" "}
+                {mandiData.district ||
+                  "Maharashtra"}
+              </small>
+
+            </div>
+
+            <strong>
+
+              ₹
+              {formatMoney(
+                mandiData
+                  .benchmarkPricePerQuintal
+              )}
+
+              <small>
+                /{t("quintal")}
+              </small>
+
+            </strong>
+
+          </div>
+
+        )}
+
+
+        {/* MANDI MARKET TABLE */}
+
+        {mandiData?.markets?.length > 0 && (
+
+          <div className="mandi-table-wrapper">
+
+            <table>
+
+              <thead>
+
+                <tr>
+
+                  <th>
+                    {t("market")}
+                  </th>
+
+                  <th>
+                    {t("minimumPrice")}
+                  </th>
+
+                  <th>
+                    {t("maximumPrice")}
+                  </th>
+
+                  <th>
+                    {t("modalPrice")}
+                  </th>
+
+                </tr>
+
+              </thead>
+
+              <tbody>
+
+                {mandiData.markets.map(
+                  (market, index) => (
+
+                    <tr key={index}>
+
+                      <td>
+                        {market.market}
+                      </td>
+
+                      <td>
+                        ₹
+                        {formatMoney(
+                          market.minPrice
+                        )}
+                      </td>
+
+                      <td>
+                        ₹
+                        {formatMoney(
+                          market.maxPrice
+                        )}
+                      </td>
+
+                      <td>
+
+                        <strong>
+                          ₹
+                          {formatMoney(
+                            market.modalPrice
+                          )}
+                        </strong>
+
+                      </td>
+
+                    </tr>
+
+                  )
+                )}
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        )}
+
+
+        {mandiData &&
+          mandiData.markets?.length === 0 && (
+
+            <p className="empty-state">
+              {t("noMandiData")}
+            </p>
+
+          )}
+
+      </section>
+
+
+      {/* ==========================================
+          SMART SELLING ENGINE
+      ========================================== */}
+
       <section className="card">
 
         <h3>
-          🧠 {t("smartSellingRecommendation")}
+          🧠 {t("smartSellingRecommendationTitle")}
         </h3>
+
+        <p>
+          {t("smartSellingDescription")}
+        </p>
+
+
+        {/* CONTROLS */}
 
         <div className="inline-form">
 
@@ -333,103 +831,618 @@ export default function Markets() {
             <input
               type="number"
               min="1"
+              step="0.1"
               value={quantity}
-              onChange={e =>
+              onChange={(e) =>
                 setQuantity(e.target.value)
               }
             />
 
           </label>
 
+
           <button
             className="btn"
             onClick={recommend}
             disabled={!isOnline}
           >
+
             {t("findBestMarket")}
+
           </button>
+
 
           <button
             className="btn secondary"
             onClick={predict}
             disabled={!isOnline}
           >
+
             {t("predict7DayPrice")}
+
           </button>
 
         </div>
 
+
         {!isOnline && (
+
           <p className="offline-feature-note">
-            📡 Smart recommendation and AI prediction
-            require an internet connection.
+            📡{" "}
+            {t(
+              "offlineRecommendationPrediction"
+            )}
           </p>
+
         )}
 
-        {/* RECOMMENDATION */}
 
-        {recommendation && (
+        {/* SMART RECOMMENDATION RESULT */}
+
+        {recommendation?.recommendation && (
 
           <div className="recommend">
 
+            <p className="eyebrow">
+              🏆{" "}
+              {t(
+                "smartSellingRecommendationTitle"
+              )}
+            </p>
+
             <h3>
-              {t("recommended")}:{" "}
-              {recommendation.recommendation.market}
+
+              {t("recommendedMarket")}:{" "}
+
+              {recommendation
+                .recommendation.market}
+
             </h3>
 
-            <p>
-              {t("price")}: ₹
-              {
-                recommendation.recommendation
-                  .pricePerQuintal
-              }
-              /quintal
+
+            {/* MAIN CALCULATION GRID */}
+
+            <div className="recommend-grid">
+
+              <div>
+
+                <span>
+                  {t("currentMarketPrice")}
+                </span>
+
+                <strong>
+
+                  ₹
+                  {formatMoney(
+                    recommendation
+                      .recommendation
+                      .currentPricePerQuintal
+                  )}
+
+                  <small>
+                    /{t("quintal")}
+                  </small>
+
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>
+                  🏛️{" "}
+                  {t("mandiBenchmark")}
+                </span>
+
+                <strong>
+
+                  ₹
+                  {formatMoney(
+                    recommendation
+                      .recommendation
+                      .mandiBenchmarkPerQuintal
+                  )}
+
+                  <small>
+                    /{t("quintal")}
+                  </small>
+
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>
+                  🤖{" "}
+                  {t("aiPredictedPrice")}
+                </span>
+
+                <strong>
+
+                  ₹
+                  {formatMoney(
+                    recommendation
+                      .recommendation
+                      .aiPredictedPricePerQuintal
+                  )}
+
+                  <small>
+                    /{t("quintal")}
+                  </small>
+
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>
+                  {t("expectedSellingPrice")}
+                </span>
+
+                <strong>
+
+                  ₹
+                  {formatMoney(
+                    recommendation
+                      .recommendation
+                      .expectedSellingPricePerQuintal
+                  )}
+
+                  <small>
+                    /{t("quintal")}
+                  </small>
+
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>
+                  {t("quantity")}
+                </span>
+
+                <strong>
+
+                  {formatMoney(
+                    recommendation
+                      .recommendation
+                      .quantityQuintal
+                  )}
+
+                  <small>
+                    {t("quintal")}
+                  </small>
+
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>
+                  📍 {t("distance")}
+                </span>
+
+                <strong>
+
+                  {formatMoney(
+                    recommendation
+                      .recommendation
+                      .distanceKm
+                  )}
+
+                  <small>
+                    km
+                  </small>
+
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>
+                  🚚 {t("transportCost")}
+                </span>
+
+                <strong>
+
+                  ₹
+                  {formatMoney(
+                    recommendation
+                      .recommendation
+                      .transportCost
+                  )}
+
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>
+                  {t("grossRevenue")}
+                </span>
+
+                <strong>
+
+                  ₹
+                  {formatMoney(
+                    recommendation
+                      .recommendation
+                      .grossRevenue
+                  )}
+
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>
+                  {t("netPrice")}
+                </span>
+
+                <strong>
+
+                  ₹
+                  {formatMoney(
+                    recommendation
+                      .recommendation
+                      .netPricePerQuintal
+                  )}
+
+                  <small>
+                    /{t("quintal")}
+                  </small>
+
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            {/* MANDI STATUS */}
+
+            <div className="mandi-message">
+
+              <strong>
+
+                {getMandiStatusText(
+                  recommendation
+                    .recommendation
+                    .mandiStatus
+                )}
+
+              </strong>
+
+              {recommendation
+                .recommendation
+                .mandiDifferencePercent !==
+                null && (
+
+                <span>
+
+                  {" ("}
+
+                  {recommendation
+                    .recommendation
+                    .mandiDifferencePercent > 0
+                    ? "+"
+                    : ""}
+
+                  {Number(
+                    recommendation
+                      .recommendation
+                      .mandiDifferencePercent
+                  ).toFixed(2)}
+
+                  % {t("vsMandiBenchmark")})
+
+                </span>
+
+              )}
+
+            </div>
+
+
+            {/* AI TREND STATUS */}
+
+            {recommendation
+              .recommendation
+              .aiDifferencePercent !==
+              null && (
+
+              <div className="prediction">
+
+                <p className="eyebrow">
+
+                  🤖{" "}
+                  {t("aiMarketOutlook")}
+
+                </p>
+
+                {(() => {
+                  const trend =
+                    getAITrendText(
+                      recommendation
+                        .recommendation
+                        .aiDifferencePercent
+                    );
+
+                  return (
+                    <>
+                      <strong>
+                        {trend.title}
+                      </strong>
+
+                      <small>
+                        {trend.description}
+                      </small>
+                    </>
+                  );
+                })()}
+
+              </div>
+
+            )}
+
+
+            {/* NET PROFIT */}
+
+            <div className="net-profit-box">
+
+              <span>
+                💰{" "}
+                {t("estimatedNetProfit")}
+              </span>
+
+              <strong>
+
+                ₹
+                {formatMoney(
+                  recommendation
+                    .recommendation
+                    .estimatedNetProfit
+                )}
+
+              </strong>
+
+            </div>
+
+
+            {/* FORMULA */}
+
+            <p className="recommend-formula">
+              {recommendation.formula}
             </p>
 
-            <p>
-              {t("distance")}:{" "}
-              {
-                recommendation.recommendation
-                  .distanceKm
-              } km
-            </p>
 
-            <p>
-              {t("estimatedTransport")}: ₹
-              {
-                recommendation.recommendation
-                  .transportCost
-              }
-            </p>
+            {recommendation.note && (
 
-            <strong>
-              {t("estimatedNetProfit")}: ₹
-              {
-                recommendation.recommendation
-                  .estimatedNetProfit
-              }
-            </strong>
+              <small className="recommend-note">
+
+                ℹ️ {recommendation.note}
+
+              </small>
+
+            )}
 
           </div>
 
         )}
 
-        {/* PREDICTION */}
+
+        {/* MARKET COMPARISON */}
+
+        {recommendation?.options?.length > 0 && (
+
+          <div className="recommend-options">
+
+            <h3>
+              {t("marketComparison")}
+            </h3>
+
+            <div className="table-wrapper">
+
+              <table>
+
+                <thead>
+
+                  <tr>
+
+                    <th>
+                      {t("market")}
+                    </th>
+
+                    <th>
+                      {t("currentPrice")}
+                    </th>
+
+                    <th>
+                      {t("mandi")}
+                    </th>
+
+                    <th>
+                      {t("aiPrediction")}
+                    </th>
+
+                    <th>
+                      {t("distance")}
+                    </th>
+
+                    <th>
+                      {t("transport")}
+                    </th>
+
+                    <th>
+                      {t("estimatedNetProfit")}
+                    </th>
+
+                  </tr>
+
+                </thead>
+
+                <tbody>
+
+                  {recommendation.options.map(
+                    (option, index) => (
+
+                      <tr
+                        key={`${option.market}-${index}`}
+                      >
+
+                        <td>
+
+                          {index === 0 && (
+                            <span>
+                              🏆{" "}
+                            </span>
+                          )}
+
+                          {option.market}
+
+                        </td>
+
+
+                        <td>
+
+                          ₹
+                          {formatMoney(
+                            option
+                              .currentPricePerQuintal
+                          )}
+
+                        </td>
+
+
+                        <td>
+
+                          ₹
+                          {formatMoney(
+                            option
+                              .mandiBenchmarkPerQuintal
+                          )}
+
+                        </td>
+
+
+                        <td>
+
+                          ₹
+                          {formatMoney(
+                            option
+                              .aiPredictedPricePerQuintal
+                          )}
+
+                        </td>
+
+
+                        <td>
+
+                          {formatMoney(
+                            option.distanceKm
+                          )}{" "}
+                          km
+
+                        </td>
+
+
+                        <td>
+
+                          ₹
+                          {formatMoney(
+                            option.transportCost
+                          )}
+
+                        </td>
+
+
+                        <td>
+
+                          <strong>
+
+                            ₹
+                            {formatMoney(
+                              option
+                                .estimatedNetProfit
+                            )}
+
+                          </strong>
+
+                        </td>
+
+                      </tr>
+
+                    )
+                  )}
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+        )}
+
+
+        {/* AI PRICE PREDICTION */}
 
         {prediction && (
 
           <div className="prediction">
 
+            <p className="eyebrow">
+
+              🤖{" "}
+              {t("aiPricePrediction")}
+
+            </p>
+
             <strong>
-              {t("predictedPriceAfter7Days")}: ₹
-              {prediction.predictedPrice}/quintal
+
+              {t(
+                "predictedPriceAfter7Days"
+              )}: ₹
+
+              {formatMoney(
+                prediction.predictedPrice
+              )}
+
+              /{t("quintal")}
+
             </strong>
 
             <small>
+
               {t("model")}:{" "}
+
               {prediction.model ||
                 prediction.source}
+
             </small>
+
+            {prediction.message && (
+
+              <small>
+                {prediction.message}
+              </small>
+
+            )}
 
           </div>
 
@@ -440,3 +1453,4 @@ export default function Markets() {
     </main>
   );
 }
+

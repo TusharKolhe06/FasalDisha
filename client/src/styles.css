@@ -916,3 +916,1500 @@ button:disabled {
   justify-content: center;
   text-align: center;
 }
+
+/* =========================================================
+   FASALDISHA HOMEPAGE
+   ========================================================= */
+
+.home-page {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+/* HERO */
+
+.home-hero {
+  min-height: 540px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 70px 7%;
+
+  position: relative;
+
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.92) 0%,
+      rgba(255, 255, 255, 0.72) 40%,
+      rgba(255, 255, 255, 0.05) 75%
+    ),
+    url(https://plus.unsplash.com/premium_photo-1722682240046-29cf0c654744?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D);
+
+  background-size: cover;
+  background-position: center;
+
+  border-radius: 0;
+
+  overflow: hidden;
+}
+
+.hero-content {
+  max-width: 610px;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-eyebrow {
+  color: var(--primary);
+  font-size: 14px !important;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+.home-hero h1 {
+  margin: 0 0 22px;
+
+  font-size: clamp(42px, 6vw, 68px);
+
+  line-height: 1.02;
+
+  letter-spacing: -2px;
+
+  color: #064b36;
+}
+
+.hero-description {
+  max-width: 570px;
+
+  font-size: 19px !important;
+
+  line-height: 1.6;
+
+  color: #263a31 !important;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 14px;
+
+  margin-top: 30px;
+
+  flex-wrap: wrap;
+}
+
+.home-btn {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 14px 22px;
+
+  border-radius: 11px;
+
+  font-weight: 700;
+
+  font-size: 16px;
+
+  transition: 0.2s ease;
+}
+
+.home-btn.primary {
+  background: #13854d;
+  color: white;
+
+  box-shadow: 0 6px 18px rgba(19, 133, 77, 0.2);
+}
+
+.home-btn.primary:hover {
+  background: #0b693b;
+  transform: translateY(-2px);
+}
+
+.home-btn.outline {
+  background: white;
+
+  color: #08603c;
+
+  border: 2px solid #13854d;
+}
+
+.home-btn.outline:hover {
+  background: #eaf7ef;
+
+  transform: translateY(-2px);
+}
+
+
+/* FEATURES */
+
+.home-features {
+  width: min(1100px, 92%);
+
+  margin: -28px auto 0;
+
+  position: relative;
+  z-index: 5;
+
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 22px;
+}
+
+.home-feature-card {
+  background: white;
+
+  padding: 28px 25px;
+
+  text-align: center;
+
+  border-radius: 20px;
+
+  border: 1px solid #e5ebe5;
+
+  box-shadow: 0 8px 28px rgba(20, 60, 35, 0.09);
+
+  transition: 0.2s ease;
+}
+
+.home-feature-card:hover {
+  transform: translateY(-5px);
+
+  box-shadow: 0 14px 35px rgba(20, 60, 35, 0.13);
+}
+
+.feature-icon {
+  width: 64px;
+  height: 64px;
+
+  margin: 0 auto 17px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  font-size: 29px;
+}
+
+.feature-icon.green {
+  background: #e5f4df;
+}
+
+.feature-icon.blue {
+  background: #e2f2fa;
+}
+
+.feature-icon.yellow {
+  background: #fff1c9;
+}
+
+.home-feature-card h3 {
+  color: #064b36;
+
+  font-size: 20px;
+
+  margin-bottom: 10px;
+}
+
+.home-feature-card p {
+  color: #526058;
+
+  margin: 0;
+
+  font-size: 15px;
+
+  line-height: 1.6;
+}
+
+
+/* HOW IT WORKS */
+
+.how-section {
+  width: min(1050px, 92%);
+
+  margin: 70px auto;
+
+  text-align: center;
+}
+
+.how-section h2 {
+  color: #064b36;
+
+  font-size: 30px;
+
+  margin-bottom: 8px;
+}
+
+.how-line {
+  width: 55px;
+  height: 3px;
+
+  background: var(--primary);
+
+  margin: 0 auto 45px;
+
+  border-radius: 5px;
+}
+
+.how-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 40px;
+}
+
+.how-item {
+  position: relative;
+
+  text-align: center;
+}
+
+.how-item > span {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto 18px;
+
+  border-radius: 50%;
+
+  background: #e6f4dc;
+
+  color: #075638;
+
+  font-weight: 800;
+
+  font-size: 17px;
+}
+
+.how-icon {
+  width: 75px;
+  height: 75px;
+
+  margin: 0 auto 17px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 17px;
+
+  background: #eef8e8;
+
+  font-size: 35px;
+}
+
+.how-item h3 {
+  color: #064b36;
+
+  margin-bottom: 8px;
+}
+
+.how-item p {
+  max-width: 250px;
+
+  margin: auto;
+
+  color: #5d6962;
+}
+
+
+/* CTA */
+
+.home-cta {
+  width: min(1100px, 92%);
+
+  margin: 0 auto 50px;
+
+  padding: 30px 38px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 25px;
+
+  background: #f1f8ed;
+
+  border-radius: 20px;
+
+  border: 1px solid #e0ecd9;
+}
+
+.cta-icon {
+  width: 80px;
+  height: 80px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: white;
+
+  border-radius: 50%;
+
+  font-size: 42px;
+}
+
+.home-cta h2 {
+  margin: 0 0 5px;
+
+  color: #064b36;
+}
+
+.home-cta p {
+  margin: 0;
+
+  color: #526058;
+}
+
+.home-cta .home-btn {
+  margin-left: auto;
+
+  flex-shrink: 0;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+  .home-hero {
+    min-height: 520px;
+
+    padding: 45px 6%;
+
+    background-position: 62% center;
+
+    background-image:
+      linear-gradient(
+        90deg,
+        rgba(255,255,255,0.94),
+        rgba(255,255,255,0.70)
+      ),
+      url("/home-bg.png");
+  }
+
+  .hero-content {
+    max-width: 100%;
+  }
+
+  .home-hero h1 {
+    font-size: 44px;
+
+    letter-spacing: -1.5px;
+  }
+
+  .hero-description {
+    font-size: 17px !important;
+  }
+
+  .home-features {
+    grid-template-columns: 1fr;
+
+    margin-top: 20px;
+
+    gap: 15px;
+  }
+
+  .home-feature-card {
+    padding: 23px;
+  }
+
+  .how-section {
+    margin: 55px auto;
+  }
+
+  .how-grid {
+    grid-template-columns: 1fr;
+
+    gap: 35px;
+  }
+
+  .home-cta {
+    flex-direction: column;
+
+    text-align: center;
+
+    padding: 30px 20px;
+  }
+
+  .home-cta .home-btn {
+    width: 100%;
+
+    margin-left: 0;
+  }
+}
+
+
+/* SMALL MOBILE */
+
+@media (max-width: 500px) {
+
+  .home-hero {
+    min-height: 500px;
+
+    padding: 38px 20px;
+
+    background-position: 65% center;
+  }
+
+  .home-hero h1 {
+    font-size: 37px;
+
+    line-height: 1.05;
+  }
+
+  .hero-description {
+    font-size: 16px !important;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+  }
+
+  .home-btn {
+    width: 100%;
+
+    padding: 13px 16px;
+  }
+
+  .home-features {
+    width: 92%;
+  }
+
+  .how-section {
+    width: 90%;
+  }
+
+  .home-cta {
+    width: 92%;
+  }
+}
+/* =========================================================
+   FASALDISHA - MARKET & SMART SELLING STYLES
+   ========================================================= */
+
+
+/* =========================================================
+   MANDI CARD
+   ========================================================= */
+
+.mandi-card {
+  margin-top: 24px;
+}
+
+.mandi-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.mandi-header h2 {
+  margin: 4px 0 8px;
+}
+
+.mandi-header p:not(.eyebrow) {
+  margin: 0;
+  color: #667085;
+}
+
+
+/* =========================================================
+   MANDI CONTROLS
+   ========================================================= */
+
+.mandi-controls {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.mandi-controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.mandi-controls select {
+  min-width: 170px;
+  padding: 10px 12px;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 14px;
+  outline: none;
+}
+
+.mandi-controls select:focus {
+  border-color: #667085;
+  box-shadow: 0 0 0 3px rgba(102, 112, 133, 0.1);
+}
+
+
+/* =========================================================
+   MANDI MESSAGE
+   ========================================================= */
+
+.mandi-message {
+  margin: 16px 0;
+  padding: 12px 15px;
+  border-radius: 8px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  color: #9a3412;
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   MANDI BENCHMARK
+   ========================================================= */
+
+.mandi-benchmark {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+
+  margin: 20px 0;
+  padding: 20px;
+
+  border-radius: 12px;
+  border: 1px solid #d1fae5;
+  background: #ecfdf3;
+}
+
+.mandi-benchmark > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.mandi-benchmark span {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.mandi-benchmark small {
+  color: #667085;
+  font-size: 13px;
+}
+
+.mandi-benchmark > strong {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.mandi-benchmark > strong small {
+  font-size: 13px;
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+
+/* =========================================================
+   MANDI TABLE
+   ========================================================= */
+
+.mandi-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 16px;
+}
+
+.mandi-table-wrapper table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+}
+
+.mandi-table-wrapper th,
+.mandi-table-wrapper td {
+  padding: 13px 14px;
+  text-align: left;
+  border-bottom: 1px solid #eaecf0;
+}
+
+.mandi-table-wrapper th {
+  font-size: 13px;
+  color: #667085;
+  font-weight: 700;
+  background: #f9fafb;
+}
+
+.mandi-table-wrapper td {
+  font-size: 14px;
+}
+
+.mandi-table-wrapper tbody tr:hover {
+  background: #f9fafb;
+}
+
+
+/* =========================================================
+   SMART SELLING SECTION
+   ========================================================= */
+
+.card:has(.recommend) {
+  margin-top: 24px;
+}
+
+.card > h3 {
+  margin-top: 0;
+}
+
+.card > h3 + p {
+  color: #667085;
+}
+
+
+/* =========================================================
+   INLINE FORM
+   ========================================================= */
+
+.inline-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.inline-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.inline-form input {
+  width: 150px;
+  padding: 10px 12px;
+
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+
+  font-size: 15px;
+  outline: none;
+}
+
+.inline-form input:focus {
+  border-color: #667085;
+  box-shadow: 0 0 0 3px rgba(102, 112, 133, 0.1);
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.btn {
+  border: none;
+  border-radius: 8px;
+
+  padding: 10px 16px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.btn.secondary {
+  background: #f2f4f7;
+  color: #344054;
+}
+
+
+/* =========================================================
+   RECOMMENDATION RESULT
+   ========================================================= */
+
+.recommend {
+  margin-top: 24px;
+
+  padding: 22px;
+
+  border: 1px solid #d1fadf;
+  border-radius: 14px;
+
+  background: #f6fffa;
+}
+
+.recommend .eyebrow {
+  margin-bottom: 6px;
+}
+
+.recommend h3 {
+  margin: 5px 0 20px;
+  font-size: 22px;
+}
+
+
+/* =========================================================
+   RECOMMENDATION GRID
+   ========================================================= */
+
+.recommend-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 14px;
+
+  margin-top: 18px;
+}
+
+.recommend-grid > div {
+  padding: 15px;
+
+  border: 1px solid #eaecf0;
+  border-radius: 10px;
+
+  background: #fff;
+
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.recommend-grid span {
+  font-size: 13px;
+  color: #667085;
+  font-weight: 600;
+}
+
+.recommend-grid strong {
+  font-size: 19px;
+}
+
+.recommend-grid strong small {
+  margin-left: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #667085;
+}
+
+
+/* =========================================================
+   NET PROFIT BOX
+   ========================================================= */
+
+.net-profit-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 20px;
+
+  margin-top: 18px;
+  padding: 18px 20px;
+
+  border-radius: 10px;
+
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+}
+
+.net-profit-box span {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.net-profit-box strong {
+  font-size: 26px;
+}
+
+
+/* =========================================================
+   RECOMMENDATION FORMULA
+   ========================================================= */
+
+.recommend-formula {
+  margin: 16px 0 5px;
+
+  font-size: 13px;
+  color: #667085;
+}
+
+.recommend-note {
+  display: block;
+
+  margin-top: 8px;
+
+  color: #667085;
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   MARKET OPTIONS
+   ========================================================= */
+
+.recommend-options {
+  margin-top: 28px;
+}
+
+.recommend-options h3 {
+  margin-bottom: 14px;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.recommend-options table {
+  width: 100%;
+  min-width: 650px;
+  border-collapse: collapse;
+}
+
+.recommend-options th,
+.recommend-options td {
+  padding: 13px 14px;
+
+  text-align: left;
+
+  border-bottom: 1px solid #eaecf0;
+}
+
+.recommend-options th {
+  background: #f9fafb;
+
+  font-size: 13px;
+  color: #667085;
+}
+
+.recommend-options td {
+  font-size: 14px;
+}
+
+.recommend-options tbody tr:first-child {
+  background: #f6fffa;
+}
+
+.recommend-options tbody tr:hover {
+  background: #f9fafb;
+}
+
+
+/* =========================================================
+   PREDICTION CARD
+   ========================================================= */
+
+.prediction {
+  margin-top: 24px;
+
+  padding: 20px;
+
+  border-radius: 12px;
+
+  border: 1px solid #dbeafe;
+  background: #eff6ff;
+
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.prediction .eyebrow {
+  margin: 0;
+}
+
+.prediction strong {
+  font-size: 21px;
+}
+
+.prediction small {
+  color: #667085;
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   OFFLINE INFORMATION
+   ========================================================= */
+
+.offline-data-note {
+  margin-top: 7px !important;
+
+  font-size: 13px;
+  color: #667085;
+}
+
+.offline-feature-note {
+  margin-top: 14px;
+
+  padding: 11px 14px;
+
+  border-radius: 8px;
+
+  background: #f9fafb;
+  border: 1px solid #eaecf0;
+
+  color: #667085;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.empty-state {
+  padding: 20px;
+
+  text-align: center;
+
+  color: #667085;
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .recommend-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .mandi-header {
+    flex-direction: column;
+  }
+
+  .mandi-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mandi-controls label {
+    width: 100%;
+  }
+
+  .mandi-controls select {
+    width: 100%;
+  }
+
+  .mandi-controls .btn {
+    width: 100%;
+  }
+
+
+  .mandi-benchmark {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .mandi-benchmark > strong {
+    font-size: 24px;
+  }
+
+
+  .inline-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .inline-form label {
+    width: 100%;
+  }
+
+  .inline-form input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .inline-form .btn {
+    width: 100%;
+  }
+
+
+  .recommend {
+    padding: 17px;
+  }
+
+  .recommend h3 {
+    font-size: 19px;
+  }
+
+
+  .recommend-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .net-profit-box {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .net-profit-box strong {
+    font-size: 24px;
+  }
+
+
+  .mandi-table-wrapper table,
+  .recommend-options table {
+    min-width: 600px;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 400px) {
+
+  .recommend-grid > div {
+    padding: 12px;
+  }
+
+  .recommend-grid strong {
+    font-size: 17px;
+  }
+
+  .net-profit-box {
+    padding: 15px;
+  }
+
+}
+/* =========================================================
+   FASALDISHA - SMART SELLING ENGINE
+   ========================================================= */
+
+/* ---------- Mandi Section ---------- */
+
+.mandi-card {
+  margin-top: 24px;
+}
+
+.mandi-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.mandi-header h2 {
+  margin: 4px 0 6px;
+  font-size: 24px;
+}
+
+.mandi-header p:not(.eyebrow) {
+  margin: 0;
+  color: #667085;
+}
+
+.mandi-controls {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 18px;
+  margin-bottom: 20px;
+  border-radius: 14px;
+  background: #f8fafc;
+  border: 1px solid #e4e7ec;
+}
+
+.mandi-controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.mandi-controls select {
+  min-width: 170px;
+  padding: 10px 12px;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  background: white;
+  font-size: 14px;
+}
+
+.mandi-controls button {
+  min-height: 42px;
+}
+
+.mandi-message {
+  margin: 16px 0;
+  padding: 12px 15px;
+  border-radius: 10px;
+  background: #f8fafc;
+  border: 1px solid #e4e7ec;
+  color: #344054;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ---------- Mandi Benchmark ---------- */
+
+.mandi-benchmark {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 22px;
+  margin: 20px 0;
+  border-radius: 14px;
+  border: 1px solid #d0d5dd;
+  background: #f8fafc;
+}
+
+.mandi-benchmark span {
+  display: block;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.mandi-benchmark small {
+  display: block;
+  margin-top: 5px;
+  color: #667085;
+}
+
+.mandi-benchmark strong {
+  font-size: 25px;
+}
+
+.mandi-benchmark strong small {
+  display: inline;
+  margin-left: 4px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.mandi-table-wrapper {
+  overflow-x: auto;
+}
+
+.mandi-table-wrapper table {
+  width: 100%;
+  min-width: 600px;
+}
+
+/* =========================================================
+   SMART SELLING RECOMMENDATION
+   ========================================================= */
+
+.recommend {
+  margin-top: 24px;
+  padding: 24px;
+  border-radius: 18px;
+  border: 1px solid #d0d5dd;
+  background: white;
+  box-shadow: 0 8px 30px rgba(16, 24, 40, 0.07);
+}
+
+.recommend > h3 {
+  margin: 5px 0 22px;
+  font-size: 24px;
+}
+
+.recommend .eyebrow {
+  margin-bottom: 6px;
+}
+
+/* ---------- Recommendation Grid ---------- */
+
+.recommend-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.recommend-grid > div {
+  padding: 16px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #eaecf0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.recommend-grid > div:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 16px rgba(16, 24, 40, 0.08);
+}
+
+.recommend-grid span {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 13px;
+  color: #667085;
+  font-weight: 600;
+}
+
+.recommend-grid strong {
+  display: block;
+  font-size: 20px;
+  line-height: 1.3;
+}
+
+.recommend-grid strong small {
+  margin-left: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #667085;
+}
+
+/* ---------- Net Profit ---------- */
+
+.net-profit-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+  padding: 20px 22px;
+  border-radius: 14px;
+  border: 1px solid #d0d5dd;
+  background: #f8fafc;
+}
+
+.net-profit-box span {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.net-profit-box strong {
+  font-size: 28px;
+}
+
+/* ---------- AI Prediction ---------- */
+
+.prediction {
+  margin-top: 18px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  border: 1px solid #d0d5dd;
+  background: #f8fafc;
+}
+
+.prediction .eyebrow {
+  margin-bottom: 6px;
+}
+
+.prediction strong {
+  display: block;
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.prediction small {
+  display: block;
+  margin-top: 5px;
+  color: #667085;
+}
+
+/* ---------- Formula / Note ---------- */
+
+.recommend-formula {
+  margin: 16px 0 5px;
+  padding: 12px 14px;
+  border-radius: 9px;
+  background: #f8fafc;
+  color: #475467;
+  font-size: 13px;
+  font-family: monospace;
+}
+
+.recommend-note {
+  display: block;
+  margin-top: 10px;
+  color: #667085;
+}
+
+/* =========================================================
+   MARKET COMPARISON
+   ========================================================= */
+
+.recommend-options {
+  margin-top: 28px;
+}
+
+.recommend-options h3 {
+  margin-bottom: 14px;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #eaecf0;
+  border-radius: 12px;
+}
+
+.table-wrapper table {
+  width: 100%;
+  min-width: 850px;
+  border-collapse: collapse;
+}
+
+.table-wrapper th {
+  white-space: nowrap;
+}
+
+.table-wrapper td,
+.table-wrapper th {
+  padding: 13px 14px;
+}
+
+.table-wrapper tbody tr:first-child {
+  background: #f8fafc;
+}
+
+.table-wrapper tbody tr:hover {
+  background: #f9fafb;
+}
+
+/* =========================================================
+   OFFLINE UI
+   ========================================================= */
+
+.offline-data-note {
+  margin-top: 7px !important;
+  padding: 8px 12px;
+  width: fit-content;
+  border-radius: 8px;
+  background: #fff7ed;
+  color: #9a3412 !important;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.offline-feature-note {
+  margin-top: 15px;
+  padding: 12px 14px;
+  border-radius: 9px;
+  background: #fff7ed;
+  color: #9a3412;
+  font-size: 14px;
+}
+
+/* =========================================================
+   MOBILE RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .recommend-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .mandi-benchmark {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 600px) {
+  .recommend {
+    padding: 17px;
+  }
+
+  .recommend > h3 {
+    font-size: 20px;
+  }
+
+  .recommend-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mandi-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mandi-controls label,
+  .mandi-controls select,
+  .mandi-controls button {
+    width: 100%;
+  }
+
+  .mandi-benchmark {
+    padding: 17px;
+  }
+
+  .mandi-benchmark strong {
+    font-size: 23px;
+  }
+
+  .net-profit-box {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .net-profit-box strong {
+    font-size: 25px;
+  }
+}
